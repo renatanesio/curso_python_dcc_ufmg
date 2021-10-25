@@ -73,9 +73,7 @@ def getCodeMaxSummerGold(games):
         The table with results from Olympic Games, organized by country.
     """
 
-    #TODO
-
-    return 0
+    return games.loc[games.GoldS.idxmax(), 'Code']
 
 
 # Test 5
@@ -95,8 +93,13 @@ def getNthBestSummerCountry(games, n):
         The index that we want in the rank.
     """
 
-    # TODO
-    return "No Country"
+    cols = ["GoldS", "Country", "SilverS", "Country", "BronzeS", "Country"]
+    order = [False, True, False, True, False, True]
+
+    df = games.sort_values(by=cols, ascending=order)
+    df = df.reset_index(drop=True)
+
+    return df.loc[n, "Country"]
 
 
 # Test 6
@@ -115,8 +118,9 @@ def numCountriesWithMoreThanNWinterMedals(games, n):
         The number of medals that we consider as a threshold.
     """
 
-    # TODO
-    return 0
+    above_n = games[(games["TotalW"] > n)]
+
+    return len(above_n)
 
 
 # Test 7
@@ -134,8 +138,10 @@ def numWinterCountries(games):
         The table with results from Olympic Games, organized by country.
     """
 
-    # TODO
-    return 0
+    average = games["GoldW"].mean()
+    above_average = games[(games["GoldW"] > average)]
+
+    return len(above_average)
 
 
 # Test 8
@@ -155,8 +161,11 @@ def countGoldsWithLetter(games, c):
         considered.
     """
 
-    # TODO
-    return 0
+    c = c.capitalize()
+
+    start_with = games[games['Country'].str[0].isin([c])]
+
+    return start_with["GoldS"].sum()
 
 
 # Test 9
@@ -174,5 +183,6 @@ def countHybernalCountries(games):
         The table with results from Olympic Games, organized by country.
     """
 
-    # TODO
-    return 0
+    hybernal = games[(games["TotalW"] >= games["TotalS"] )]
+
+    return len(hybernal)
